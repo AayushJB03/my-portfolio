@@ -17,51 +17,30 @@ type TechStackRow = {
   sort_order: number
 }
 
+// ponytail: kept in sync with supabase/admin_content_schema.sql's
+// tech_stack_items seed — this is what renders when Supabase isn't
+// reachable (e.g. env vars not yet set on a deploy target), so it must
+// match, not just the seed data.
 export const TECH_STACK: TechStack[] = [
-  {
-    key: "typescript",
-    title: "TypeScript",
-    icon: getSimpleIconUrl("TypeScript"),
-  },
-  {
-    key: "javascript",
-    title: "JavaScript",
-    icon: getSimpleIconUrl("JavaScript"),
-  },
   {
     key: "python",
     title: "Python",
     icon: getSimpleIconUrl("Python"),
   },
   {
-    key: "go",
-    title: "Go",
-    icon: getSimpleIconUrl("Go"),
+    key: "pytorch",
+    title: "PyTorch",
+    icon: getSimpleIconUrl("PyTorch"),
   },
   {
-    key: "nodejs",
-    title: "Node.js",
-    icon: getSimpleIconUrl("Node.js"),
+    key: "openai",
+    title: "OpenAI",
+    icon: getSimpleIconUrl("OpenAI"),
   },
   {
-    key: "bun",
-    title: "Bun",
-    icon: getSimpleIconUrl("Bun"),
-  },
-  {
-    key: "elysia",
-    title: "Elysia",
-    icon: getSimpleIconUrl("Elysia"),
-  },
-  {
-    key: "express",
-    title: "Express",
-    icon: getSimpleIconUrl("Express"),
-  },
-  {
-    key: "hono",
-    title: "Hono",
-    icon: getSimpleIconUrl("Hono"),
+    key: "huggingface",
+    title: "Hugging Face",
+    icon: getSimpleIconUrl("Hugging Face"),
   },
   {
     key: "fastapi",
@@ -69,94 +48,24 @@ export const TECH_STACK: TechStack[] = [
     icon: getSimpleIconUrl("FastAPI"),
   },
   {
-    key: "flask",
-    title: "Flask",
-    icon: getSimpleIconUrl("Flask"),
+    key: "numpy",
+    title: "NumPy",
+    icon: getSimpleIconUrl("NumPy"),
   },
   {
-    key: "socketio",
-    title: "Socket.io",
-    icon: getSimpleIconUrl("Socket.io"),
+    key: "pandas",
+    title: "Pandas",
+    icon: getSimpleIconUrl("Pandas"),
   },
   {
-    key: "react",
-    title: "React",
-    icon: getSimpleIconUrl("React"),
-  },
-  {
-    key: "nextjs",
-    title: "Next.js",
-    icon: getSimpleIconUrl("Next.js"),
-  },
-  {
-    key: "angular",
-    title: "Angular",
-    icon: getSimpleIconUrl("Angular"),
-  },
-  {
-    key: "redux",
-    title: "Redux",
-    icon: getSimpleIconUrl("Redux"),
-  },
-  {
-    key: "zustand",
-    title: "Zustand",
-    icon: getSimpleIconUrl("Zustand"),
-  },
-  {
-    key: "shadcnui",
-    title: "ShadcnUI",
-    icon: getSimpleIconUrl("shadcnui"),
-  },
-  {
-    key: "tailwindcss",
-    title: "TailwindCSS",
-    icon: getSimpleIconUrl("Tailwind CSS"),
-  },
-  {
-    key: "framer-motion",
-    title: "FramerMotion",
-    icon: getSimpleIconUrl("Framer"),
-  },
-  {
-    key: "ffmpeg-wasm",
-    title: "FfmpegWASM",
-    icon: getSimpleIconUrl("FFmpeg"),
-  },
-  {
-    key: "mongodb",
-    title: "MongoDB",
-    icon: getSimpleIconUrl("MongoDB"),
+    key: "jupyter",
+    title: "Jupyter",
+    icon: getSimpleIconUrl("Jupyter"),
   },
   {
     key: "postgresql",
     title: "PostgreSQL",
     icon: getSimpleIconUrl("PostgreSQL"),
-  },
-  {
-    key: "sqlite",
-    title: "SQLite",
-    icon: getSimpleIconUrl("SQLite"),
-  },
-  {
-    key: "redis",
-    title: "Redis",
-    icon: getSimpleIconUrl("Redis"),
-  },
-  {
-    key: "prisma",
-    title: "Prisma",
-    icon: getSimpleIconUrl("Prisma"),
-  },
-  {
-    key: "drizzle",
-    title: "Drizzle",
-    icon: getSimpleIconUrl("Drizzle"),
-  },
-  {
-    key: "cloudflare",
-    title: "Cloudflare",
-    icon: getSimpleIconUrl("Cloudflare"),
   },
   {
     key: "docker",
@@ -169,19 +78,9 @@ export const TECH_STACK: TechStack[] = [
     icon: getSimpleIconUrl("Git"),
   },
   {
-    key: "postman",
-    title: "Postman",
-    icon: getSimpleIconUrl("Postman"),
-  },
-  {
-    key: "cloudinary",
-    title: "Cloudinary",
-    icon: getSimpleIconUrl("Cloudinary"),
-  },
-  {
-    key: "vercel",
-    title: "Vercel",
-    icon: getSimpleIconUrl("Vercel"),
+    key: "github",
+    title: "GitHub",
+    icon: getSimpleIconUrl("GitHub"),
   },
 ]
 

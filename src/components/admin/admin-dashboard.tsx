@@ -1193,7 +1193,7 @@ export function AdminDashboard({
                     label="Focus Areas"
                     value={focusAreas}
                     onChange={setFocusAreas}
-                    placeholder="Cloud, DevOps, Automation"
+                    placeholder="AI Agents, LLMs, RAG"
                   />
                   <div className="grid gap-3 md:grid-cols-2">
                     <Field
