@@ -1,8 +1,7 @@
 export const USER = {
   name: "AAYUSH BHADBHADE",
   email: "aayushjb14@gmail.com",
-  // ponytail: placeholder initials avatar — replace via /admin once Cloudinary is set up
-  avatar: "https://ui-avatars.com/api/?name=Aayush+Bhadbhade&size=300&background=C2521B&color=fff",
+  avatar: "/assets/aayush-pfp.jpeg",
   firstName: "Aayush",
   lastName: "Bhadbhade",
   fullName: "Aayush Bhadbhade",
