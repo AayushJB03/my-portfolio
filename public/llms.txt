@@ -1,0 +1,93 @@
+# Aayush Bhadbhade
+
+> Canonical site: https://aayushbhadbhade.vercel.app
+> Canonical llms.txt: https://aayushbhadbhade.vercel.app/llms.txt
+> Last manually refreshed: 2026-09-08
+> Primary contact: aayushjb14@gmail.com
+> Primary role: AI Engineer
+
+This file is a crawler-friendly, LLM-friendly summary of Aayush Bhadbhade's portfolio. It is intended to help search engines, AI crawlers, answer engines, and other indexing systems understand the public pages, canonical links, projects, writing, and professional context on the site.
+
+## Crawl Guidance
+
+- Preferred host: https://aayushbhadbhade.vercel.app
+- Index public pages and project pages listed below.
+- Use the canonical links in this file and in /sitemap.xml.
+- Do not index private or implementation routes such as /admin, /api/*, /_next/*, analytics scripts, or contact form submission endpoints.
+- The site is a personal portfolio for Aayush Bhadbhade, also known online as AayushJB03.
+- The portfolio content focuses on AI engineering, LLMs, AI agents, and RAG.
+
+## Core Identity
+
+- Name: Aayush Bhadbhade
+- Username: AayushJB03
+- Email: mailto:aayushjb14@gmail.com
+- GitHub: https://github.com/AayushJB03
+
+## Professional Summary
+
+Aayush Bhadbhade is an AI engineer building with Python, LLMs, AI agents, and RAG pipelines — turning ideas into working systems.
+
+## Important Public Pages
+
+- Home: /
+  Main profile page with about, tech stack, GitHub activity, featured projects, writing, achievements, experience, contact form, and currently listening section.
+
+- Projects: /projects
+  Full project index for AI, LLM, and AI agent projects.
+
+- Blogs: /blogs
+  Dev.to article index.
+
+- Favorites: /favorites
+  Personal favorites including Formula 1, movies, web series, and anime.
+
+- Photography: /photography
+  Visual photography page with an interactive photo orbit.
+
+- Certificates: /certificates
+  Professional certifications and course completions.
+
+- Utilities: /utilities
+  Tools, terminals, development environments, AI assistants, and productivity systems.
+
+- Privacy: /privacy
+  Privacy note for contact form submissions, analytics, external links, and deletion requests.
+
+## Crawler And Discovery Files
+
+- llms.txt: /llms.txt
+- Sitemap: /sitemap.xml
+- Robots: /robots.txt
+
+## Contact And Privacy
+
+- Contact is available on the home page.
+- Privacy page: /privacy
+- Analytics used by the site: Google Analytics.
+- The portfolio does not use accounts, payments, or newsletter signups.
+
+## Implementation Notes
+
+- Framework: Next.js App Router
+- UI stack: React, TypeScript, Tailwind CSS, Motion, Radix UI primitives
+- Data sources: Supabase, local static data files, Dev.to API, TMDB API, GitHub activity, iTunes cover-art search
+- Analytics: Google Analytics
+- Static assets: public directory
+- Sitemap source: src/app/sitemap.ts
+- Robots source: src/app/robots.ts
+- This llms.txt source: public/llms.txt
+
+## Pending Content
+
+The following sections are intentionally omitted rather than filled with placeholder or borrowed data. Regenerate this file once real content exists:
+
+- Projects, achievements, certificates, and experience — populate via /admin, then list them here.
+- Writing — populate once a Dev.to handle is set in src/data/blogs.ts.
+- Favorites — F1 picks in src/data/f1-favorites.ts; movies/web series/anime are TMDB-list-backed, not listed here.
+- Utilities and workspace — src/data/utilities.ts, if it changes from the current defaults.
+
+## Source Freshness
+
+- This file was refreshed on 2026-09-08 as part of a portfolio identity migration; most content sections are pending real data (see "Pending Content" above).
+- For route discovery, crawlers should also use /sitemap.xml.
