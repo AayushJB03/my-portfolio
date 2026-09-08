@@ -3,8 +3,7 @@ import { USER } from "./user"
 export const SITE_INFO = {
   siteName: "Aayush Bhadbhade",
   siteTitle: "Aayush Bhadbhade — AI Engineer",
-  // ponytail: no domain yet — swap once deployed
-  url: "https://aayushbhadbhade.vercel.app",
+  url: "https://aayushx7.vercel.app",
   name: "Aayush Bhadbhade",
   description:
     "AI engineer larping into tech with AI — building with Python, LLMs & AI agents, and RAG pipelines.",
@@ -24,7 +23,7 @@ export const SITE_INFO = {
   authors: [
     {
       name: USER.fullName,
-      url: "https://aayushbhadbhade.vercel.app",
+      url: "https://aayushx7.vercel.app",
     },
   ],
 }

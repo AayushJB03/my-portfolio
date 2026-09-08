@@ -1,7 +1,7 @@
 # Aayush Bhadbhade
 
-> Canonical site: https://aayushbhadbhade.vercel.app
-> Canonical llms.txt: https://aayushbhadbhade.vercel.app/llms.txt
+> Canonical site: https://aayushx7.vercel.app
+> Canonical llms.txt: https://aayushx7.vercel.app/llms.txt
 > Last manually refreshed: 2026-09-08
 > Primary contact: aayushjb14@gmail.com
 > Primary role: AI Engineer
@@ -10,7 +10,7 @@ This file is a crawler-friendly, LLM-friendly summary of Aayush Bhadbhade's port
 
 ## Crawl Guidance
 
-- Preferred host: https://aayushbhadbhade.vercel.app
+- Preferred host: https://aayushx7.vercel.app
 - Index public pages and project pages listed below.
 - Use the canonical links in this file and in /sitemap.xml.
 - Do not index private or implementation routes such as /admin, /api/*, /_next/*, analytics scripts, or contact form submission endpoints.
