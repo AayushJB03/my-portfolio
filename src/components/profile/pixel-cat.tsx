@@ -3,6 +3,7 @@
 import { playRandomCuteSound } from "@/lib/sounds"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
+import { motion, useMotionValue, useSpring } from "motion/react"
 import { useEffect, useRef, useState } from "react"
 
 type CatFrame = "sleep" | "alert" | "blink" | "paw"
@@ -18,13 +19,26 @@ const CAT_IMAGES: Record<CatFrame, string> = {
 const SLEEPING_FRAMES: CatFrame[] = ["sleep", "sleep", "blink", "sleep"]
 const WAKING_FRAMES: CatFrame[] = ["alert", "paw", "alert", "blink"]
 
+// How long the cursor has to sit still before the cat dozes off again.
+const IDLE_TIMEOUT_MS = 1800
+// Trails a little behind/below the pointer tip rather than sitting on it —
+// reads as "following" instead of "stuck to the cursor".
+const OFFSET_X = 18
+const OFFSET_Y = 22
+
 export const PixelCat = () => {
-  const catRef = useRef<HTMLDivElement>(null)
-  const animationRef = useRef<CatAnimation>("sleeping")
-  const frameRequestRef = useRef<number | null>(null)
-  const latestPointerRef = useRef<{ x: number; y: number } | null>(null)
+  const [enabled, setEnabled] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [animation, setAnimation] = useState<CatAnimation>("sleeping")
   const [frameIndex, setFrameIndex] = useState(0)
+  const animationRef = useRef<CatAnimation>("sleeping")
+  const idleTimeoutRef = useRef<number | null>(null)
+
+  const cursorX = useMotionValue(0)
+  const cursorY = useMotionValue(0)
+  const springX = useSpring(cursorX, { stiffness: 220, damping: 20, mass: 0.4 })
+  const springY = useSpring(cursorY, { stiffness: 220, damping: 20, mass: 0.4 })
+  const lastSoundAtRef = useRef(0)
 
   useEffect(() => {
     Object.values(CAT_IMAGES).forEach((src) => {
@@ -34,59 +48,73 @@ export const PixelCat = () => {
   }, [])
 
   useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return
+    const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+    setEnabled(!isCoarsePointer && !prefersReducedMotion)
+  }, [])
 
-    const updateAnimation = () => {
-      frameRequestRef.current = null
+  useEffect(() => {
+    if (!enabled) return
 
-      const cat = catRef.current
-      const pointer = latestPointerRef.current
-      if (!cat || !pointer) return
+    const wake = () => {
+      if (animationRef.current !== "waking") {
+        animationRef.current = "waking"
+        setAnimation("waking")
 
-      const rect = cat.getBoundingClientRect()
-      const x = rect.left + rect.width / 2
-      const y = rect.top + rect.height / 2
-      const distance = Math.hypot(pointer.x - x, pointer.y - y)
-      const nextAnimation = distance < 170 ? "waking" : "sleeping"
-
-      if (animationRef.current !== nextAnimation) {
-        animationRef.current = nextAnimation
-        setAnimation(nextAnimation)
+        // Rare + cooled-down, not on every single wake — this fires on
+        // nearly every mouse movement across the whole site, so playing a
+        // sound every time would get old fast. ~1 in 6 wakes, at most once
+        // every 6s.
+        const now = performance.now()
+        if (now - lastSoundAtRef.current > 6000 && Math.random() < 1 / 6) {
+          lastSoundAtRef.current = now
+          playRandomCuteSound()
+        }
       }
+    }
+
+    const scheduleSleep = () => {
+      if (idleTimeoutRef.current !== null) {
+        window.clearTimeout(idleTimeoutRef.current)
+      }
+      idleTimeoutRef.current = window.setTimeout(() => {
+        animationRef.current = "sleeping"
+        setAnimation("sleeping")
+      }, IDLE_TIMEOUT_MS)
     }
 
     const handlePointerMove = (event: PointerEvent) => {
-      latestPointerRef.current = { x: event.clientX, y: event.clientY }
-
-      if (frameRequestRef.current === null) {
-        frameRequestRef.current = window.requestAnimationFrame(updateAnimation)
-      }
+      cursorX.set(event.clientX + OFFSET_X)
+      cursorY.set(event.clientY + OFFSET_Y)
+      setVisible(true)
+      wake()
+      scheduleSleep()
     }
 
     const handlePointerLeave = () => {
-      latestPointerRef.current = null
-      animationRef.current = "sleeping"
-      setAnimation("sleeping")
+      setVisible(false)
     }
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true })
-    window.addEventListener("pointerleave", handlePointerLeave)
+    document.addEventListener("pointerleave", handlePointerLeave)
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove)
-      window.removeEventListener("pointerleave", handlePointerLeave)
-
-      if (frameRequestRef.current !== null) {
-        window.cancelAnimationFrame(frameRequestRef.current)
+      document.removeEventListener("pointerleave", handlePointerLeave)
+      if (idleTimeoutRef.current !== null) {
+        window.clearTimeout(idleTimeoutRef.current)
       }
     }
-  }, [])
+  }, [enabled, cursorX, cursorY])
 
   useEffect(() => {
     setFrameIndex(0)
   }, [animation])
 
   useEffect(() => {
+    if (!enabled) return
     const interval = window.setInterval(
       () => {
         setFrameIndex((index) => (index + 1) % 4)
@@ -95,29 +123,25 @@ export const PixelCat = () => {
     )
 
     return () => window.clearInterval(interval)
-  }, [animation])
+  }, [animation, enabled])
+
+  if (!enabled) return null
 
   const frames = animation === "sleeping" ? SLEEPING_FRAMES : WAKING_FRAMES
   const imageFrame = frames[frameIndex]
 
   return (
-    <div
-      ref={catRef}
-      className="relative h-16 w-16 select-none sm:h-[72px] sm:w-[72px]"
-      role="button"
-      tabIndex={0}
-      aria-label="Sleeping pixel cat — click to hear it"
-      onClick={playRandomCuteSound}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault()
-          playRandomCuteSound()
-        }
-      }}
+    <motion.div
+      aria-hidden="true"
+      style={{ x: springX, y: springY }}
+      className={cn(
+        "pointer-events-none fixed top-0 left-0 z-50 h-12 w-12 -translate-x-1/2 select-none transition-opacity duration-300 sm:h-14 sm:w-14",
+        visible ? "opacity-95" : "opacity-0"
+      )}
     >
       <span
         className={cn(
-          "font-bitcount absolute -top-1 right-2 z-10 text-[11px] font-bold text-zinc-600 transition-opacity duration-150",
+          "font-bitcount absolute -top-1 right-1 text-[10px] font-bold text-zinc-600 transition-opacity duration-150",
           animation === "waking" && "opacity-0"
         )}
       >
@@ -132,10 +156,10 @@ export const PixelCat = () => {
         draggable={false}
         priority={false}
         className={cn(
-          "h-full w-full object-contain opacity-95 transition duration-150 [image-rendering:pixelated]",
+          "h-full w-full object-contain [image-rendering:pixelated]",
           animation === "waking" && "-translate-y-0.5"
         )}
       />
-    </div>
+    </motion.div>
   )
 }

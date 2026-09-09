@@ -5,6 +5,7 @@ import { SearchProvider } from "@/components/providers/search-provider"
 import { DitherThemeProvider } from "@/components/providers/dither-theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { HireMe } from "@/core/hire-me"
+import { PixelCat } from "@/components/profile/pixel-cat"
 import { SiteBoot } from "@/components/site/site-boot"
 import { SITE_INFO, USER } from "@/data"
 import { getProfileContent } from "@/data/content"
@@ -177,6 +178,7 @@ export default async function RootLayout({
                 <ThemeShortcut />
                 <HapticFeedback />
                 <HireMe />
+                <PixelCat />
               </SiteBoot>
             </ThemeProvider>
           </DitherThemeProvider>

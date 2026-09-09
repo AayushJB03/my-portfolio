@@ -1,6 +1,5 @@
 import { USER } from "@/data"
 import Link from "next/link"
-import { PixelCat } from "../profile/pixel-cat"
 import { DitheringShader } from "../ui/dithering-shader"
 import { ContainerWrapper } from "./container"
 
@@ -31,10 +30,6 @@ export const SiteFooter = () => {
                 </Link>
               </p>
               <p>Built with love, LLMs and Coffee</p>
-            </div>
-
-            <div className="relative z-10">
-              <PixelCat />
             </div>
           </div>
         </ContainerWrapper>
