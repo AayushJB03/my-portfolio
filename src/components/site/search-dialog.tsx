@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
+import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import {
   Search,
@@ -22,6 +23,7 @@ import { useTheme } from "next-themes"
 import { useDitherTheme, DITHER_COLORS } from "@/components/providers/dither-theme-provider"
 import { cn } from "@/lib/utils"
 import { playSound } from "@/lib/sounds"
+import { switchTheme, toggleTheme } from "@/lib/theme-transition"
 import { SITE_INFO } from "@/data/site-info"
 
 interface SearchItem {
@@ -206,8 +208,12 @@ export const SearchDialog = ({ isOpen, onClose }: SearchDialogProps) => {
           <Moon className="h-4.5 w-4.5 shrink-0" />
         ),
       action: () => {
-        playSound(resolvedTheme === "dark" ? "lampOn" : "lampOff")
-        setTheme(resolvedTheme === "dark" ? "light" : "dark")
+        const next = resolvedTheme === "dark" ? "light" : "dark"
+        playSound(next === "dark" ? "tickOff" : "tickOn")
+        toggleTheme(() => {
+          switchTheme()
+          flushSync(() => setTheme(next))
+        })
         onClose()
       },
     },

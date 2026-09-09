@@ -142,6 +142,50 @@ const lampOff: SoundPlayer = (ctx, destination, startAt) => {
   lampHum(ctx, destination, startAt + 0.03, 140, 70)
 }
 
+// Sharp, filtered noise burst — a single mechanical "tick". Two of these in
+// quick succession (see tickOn/tickOff below) give a switch/relay click,
+// distinct from the softer lampOn/lampOff hum.
+const tick = (
+  ctx: AudioContext,
+  destination: AudioNode,
+  startAt: number,
+  freq: number
+) => {
+  const durationSec = 0.014
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.0001, startAt)
+  gain.gain.exponentialRampToValueAtTime(0.55, startAt + 0.002)
+  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + durationSec)
+  gain.connect(destination)
+
+  const bufferSize = Math.floor(ctx.sampleRate * durationSec)
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < bufferSize; i++) {
+    const t = 1 - i / bufferSize
+    data[i] = (Math.random() * 2 - 1) * t * t
+  }
+  const noise = ctx.createBufferSource()
+  noise.buffer = buffer
+  const filter = ctx.createBiquadFilter()
+  filter.type = "bandpass"
+  filter.frequency.value = freq
+  filter.Q.value = 8
+  noise.connect(filter)
+  filter.connect(gain)
+  noise.start(startAt)
+}
+
+const tickOn: SoundPlayer = (ctx, destination, startAt) => {
+  tick(ctx, destination, startAt, 2600)
+  tick(ctx, destination, startAt + 0.045, 4200)
+}
+
+const tickOff: SoundPlayer = (ctx, destination, startAt) => {
+  tick(ctx, destination, startAt, 4200)
+  tick(ctx, destination, startAt + 0.045, 2600)
+}
+
 export const CAT_SOUNDS = {
   meow: softMeow,
   meowHigh: highMeow,
@@ -152,6 +196,8 @@ export const SOUNDS = {
   ...CAT_SOUNDS,
   lampOn,
   lampOff,
+  tickOn,
+  tickOff,
 } as const
 
 export type SoundName = keyof typeof SOUNDS

@@ -24,7 +24,7 @@ export function ThemeShortcut() {
 
       if (e.key === "d" || e.key === "D") {
         const next = resolvedTheme === "dark" ? "light" : "dark"
-        playSound(next === "dark" ? "lampOff" : "lampOn")
+        playSound(next === "dark" ? "tickOff" : "tickOn")
         toggleTheme(() => {
           switchTheme()
           flushSync(() => setTheme(next))

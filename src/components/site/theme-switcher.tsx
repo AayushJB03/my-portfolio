@@ -23,13 +23,18 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
 
   const isDark = resolvedTheme === "dark"
 
-  const handleToggle = () => {
+  const handleToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
     const next = isDark ? "light" : "dark"
-    playSound(next === "dark" ? "lampOff" : "lampOn")
+    const rect = event.currentTarget.getBoundingClientRect()
+    const origin = {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    }
+    playSound(next === "dark" ? "tickOff" : "tickOn")
     toggleTheme(() => {
       switchTheme()
       flushSync(() => setTheme(next))
-    })
+    }, origin)
   }
 
   return (
