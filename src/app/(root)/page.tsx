@@ -7,6 +7,7 @@ import { Suspense } from "react"
 import { About } from "@/components/profile/about"
 import { Achievements } from "@/components/profile/achievements"
 import { AgentTrace } from "@/components/profile/agent-trace"
+import { DesignTokens } from "@/components/profile/design-tokens"
 import { Blogs, BlogsCta } from "@/components/profile/blogs"
 import { CurrentlyListening } from "@/components/profile/currently-listening"
 import { ContactCta } from "@/components/profile/contact-cta"
@@ -75,6 +76,9 @@ export default function Page() {
       <Separator />
 
       <AgentTrace />
+      <Separator />
+
+      <DesignTokens />
       <Separator />
 
       <Suspense fallback={<GitHubActivitySkeleton />}>
