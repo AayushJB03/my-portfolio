@@ -142,48 +142,53 @@ const lampOff: SoundPlayer = (ctx, destination, startAt) => {
   lampHum(ctx, destination, startAt + 0.03, 140, 70)
 }
 
-// Sharp, filtered noise burst — a single mechanical "tick". Two of these in
-// quick succession (see tickOn/tickOff below) give a switch/relay click,
-// distinct from the softer lampOn/lampOff hum.
-const tick = (
+// A bright two-note synth blip with a fast pitch sweep, plus an octave-up
+// overtone for sparkle — a catchy little "boop" rather than a mechanical
+// click. Direction of the sweep flips for on/off.
+const blip = (
   ctx: AudioContext,
   destination: AudioNode,
   startAt: number,
-  freq: number
+  fromFreq: number,
+  toFreq: number
 ) => {
-  const durationSec = 0.014
+  const duration = 0.16
   const gain = ctx.createGain()
   gain.gain.setValueAtTime(0.0001, startAt)
-  gain.gain.exponentialRampToValueAtTime(0.55, startAt + 0.002)
-  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + durationSec)
+  gain.gain.exponentialRampToValueAtTime(0.32, startAt + 0.008)
+  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration)
   gain.connect(destination)
 
-  const bufferSize = Math.floor(ctx.sampleRate * durationSec)
-  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
-  const data = buffer.getChannelData(0)
-  for (let i = 0; i < bufferSize; i++) {
-    const t = 1 - i / bufferSize
-    data[i] = (Math.random() * 2 - 1) * t * t
-  }
-  const noise = ctx.createBufferSource()
-  noise.buffer = buffer
-  const filter = ctx.createBiquadFilter()
-  filter.type = "bandpass"
-  filter.frequency.value = freq
-  filter.Q.value = 8
-  noise.connect(filter)
-  filter.connect(gain)
-  noise.start(startAt)
+  const body = ctx.createOscillator()
+  body.type = "square"
+  body.frequency.setValueAtTime(fromFreq, startAt)
+  body.frequency.exponentialRampToValueAtTime(toFreq, startAt + duration * 0.75)
+  const bodyFilter = ctx.createBiquadFilter()
+  bodyFilter.type = "lowpass"
+  bodyFilter.frequency.value = 3800
+  body.connect(bodyFilter)
+  bodyFilter.connect(gain)
+  body.start(startAt)
+  body.stop(startAt + duration)
+
+  const sparkle = ctx.createOscillator()
+  sparkle.type = "sine"
+  sparkle.frequency.setValueAtTime(fromFreq * 2, startAt)
+  sparkle.frequency.exponentialRampToValueAtTime(toFreq * 2, startAt + duration * 0.75)
+  const sparkleGain = ctx.createGain()
+  sparkleGain.gain.value = 0.22
+  sparkle.connect(sparkleGain)
+  sparkleGain.connect(gain)
+  sparkle.start(startAt)
+  sparkle.stop(startAt + duration)
 }
 
 const tickOn: SoundPlayer = (ctx, destination, startAt) => {
-  tick(ctx, destination, startAt, 2600)
-  tick(ctx, destination, startAt + 0.045, 4200)
+  blip(ctx, destination, startAt, 540, 1080)
 }
 
 const tickOff: SoundPlayer = (ctx, destination, startAt) => {
-  tick(ctx, destination, startAt, 4200)
-  tick(ctx, destination, startAt + 0.045, 2600)
+  blip(ctx, destination, startAt, 1080, 480)
 }
 
 export const CAT_SOUNDS = {
